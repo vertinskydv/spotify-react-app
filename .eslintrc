@@ -1,0 +1,16 @@
+{
+  "extends": "airbnb",
+  "rules": {
+    "lines-between-class-members": "off",
+    "no-underscore-dangle": "off",
+    "import/prefer-default-export": "off",
+    "no-use-before-define": "off",
+    "react/no-typos": "off",
+    "react/forbid-prop-types": "off",
+    "class-methods-use-this": "warn",
+    "react/require-default-props": "warn"
+  },
+  "env": {
+    "browser": true
+  }
+}
