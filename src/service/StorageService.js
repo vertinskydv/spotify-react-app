@@ -8,6 +8,10 @@ class Storage {
   getToken() {
     return localStorage.getItem(TOKEN_KEY);
   }
+
+  cleanToken() {
+    return localStorage.removeItem(TOKEN_KEY);
+  }
 }
 
 export const storageService = new Storage();

@@ -1,6 +1,7 @@
 import React, { Component, Fragment } from 'react';
 import { observer } from 'mobx-react';
 import { StyleSheet, css } from 'aphrodite';
+import { PropTypes } from 'prop-types';
 
 import { albumInfoVM } from './AlbumInfoPage.vm';
 import { TrackList, Button } from '../Shared';
@@ -14,6 +15,10 @@ export class AlbumInfoPage extends Component {
     this._vm.initialize(props);
   }
 
+  _onBack = () => {
+    this.props.history.goBack();
+  }
+
   render() {
     const vm = this._vm;
 
@@ -24,7 +29,7 @@ export class AlbumInfoPage extends Component {
             <Button onClick={this._onBack}>Back</Button>
             <div className={css(SS.albumInfoBlock)}>
               <figure className={css(SS.imgWrapper)}>
-                <img className={css(SS.img)} src={vm.imgUrl} alt=""/>
+                <img className={css(SS.img)} src={vm.imgUrl} alt="album cover" />
               </figure>
               <div>
                 <h2>{vm.name}</h2>
@@ -36,18 +41,15 @@ export class AlbumInfoPage extends Component {
           </div>
         }
       </Fragment>
-
     );
-  }
-
-  _onBack = () => {
-    this.props.history.goBack();
   }
 }
 
+AlbumInfoPage.propTypes = {
+  history: PropTypes.object.isRequired,
+};
+
 const imageSize = 250;
-
-
 const SS = StyleSheet.create({
   container: {
     maxWidth: 700,

@@ -7,10 +7,19 @@
     "no-use-before-define": "off",
     "react/no-typos": "off",
     "react/forbid-prop-types": "off",
-    "class-methods-use-this": "warn",
-    "react/require-default-props": "warn"
+    "class-methods-use-this": "off",
+    "react/require-default-props": "warn",
+    "react/jsx-one-expression-per-line": "off",
+    "react/destructuring-assignment": "off",
+    "operator-linebreak": "off",
+    "react/jsx-wrap-multilines": "off"
   },
   "env": {
     "browser": true
+  },
+  "parserOptions": {
+    "ecmaFeatures": {
+      "legacyDecorators": true
+    }
   }
 }

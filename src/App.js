@@ -27,6 +27,7 @@ class App extends Component {
 
   render() {
     return (
+      /* eslint-disable react/jsx-filename-extension */
       <Router>
         <Switch>
           <Route path="/login" exact component={LoginPage} />
@@ -35,6 +36,7 @@ class App extends Component {
           <Redirect to="/login" />
         </Switch>
       </Router>
+      /* eslint-enable react/jsx-filename-extension */
     );
   }
 }

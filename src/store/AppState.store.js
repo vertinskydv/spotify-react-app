@@ -1,17 +1,16 @@
 import { observable, computed } from 'mobx';
 
 class AppState {
-  @observable _access_token = '';
+  @observable _accessToken = '';
 
   @computed
   get accessToken() {
-    return this._access_token;
+    return this._accessToken;
   }
 
   setAccessToken(token) {
-    this._access_token = token;
+    this._accessToken = token;
   }
 }
 
 export const appStateStore = new AppState();
-

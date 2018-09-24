@@ -1,14 +1,18 @@
 import React, { Component } from 'react';
 import { StyleSheet, css } from 'aphrodite';
 
-import { LoginPageVM } from './LoginPage.vm';
+import { loginPageVM } from './LoginPage.vm';
 import { Button } from '../Shared/Button';
 
 
 export class LoginPage extends Component {
   constructor(props) {
     super(props);
-    this._vm = LoginPageVM;
+    this._vm = loginPageVM;
+  }
+
+  componentDidMount() {
+    this._vm.initialize();
   }
 
   render() {

@@ -9,13 +9,50 @@ import { Input, Button, AlbumList } from '../Shared';
 
 const TITLE = 'Time to find some good album...';
 
-
 @observer
 export class SearchPage extends Component {
   constructor(props) {
     super(props);
     this._vm = SearchPageVM;
+
     this._vm.initialize(props);
+  }
+
+  _onInputTextChange = (e) => {
+    this._vm.setInputText(e.target.value);
+  }
+
+  _onSearch = () => {
+    this._vm.onSearch();
+  }
+
+  _renderSearchResult() {
+    const vm = this._vm;
+
+    if (vm.isBusy) {
+      return (
+        <div className={css(SS.loaderContainer)}>
+          <FadeLoader color="#1b48bb" />
+        </div>
+      );
+    }
+
+    if (vm.albums && vm.albums.length) {
+      return (
+        <div>
+          <h3>Search result: &quot;{vm.searchText}&quot;</h3>
+          <AlbumList albums={vm.albums} />
+        </div>
+      );
+    }
+    if (vm.searchText) {
+      return (
+        <h3>No results for: &quot;{vm.searchText}&quot;</h3>
+      );
+    }
+    return (
+      <h3>Type something for start search</h3>
+    );
   }
 
   render() {
@@ -37,43 +74,6 @@ export class SearchPage extends Component {
       </Fragment>
     );
   }
-
-  _renderSearchResult() {
-    const vm = this._vm;
-
-    if(vm.isBusy) {
-      return(
-        <div className={css(SS.loaderContainer)}>
-          <FadeLoader color={'#1b48bb'}/>
-        </div>
-      );
-    }
-
-    if(vm.albums && vm.albums.length) {
-      return (
-        <div>
-          <h3>Search result: "{vm.searchText}"</h3>
-          <AlbumList albums={vm.albums}/>
-        </div>
-      );
-    } else if (vm.searchText) {
-      return (
-        <h3>No results for: "{vm.searchText}"</h3>
-      );
-    } else {
-      return (
-        <h3>Type something for start search</h3>
-      );
-    }
-  }
-
-  _onInputTextChange = (e) => {
-    this._vm.setInputText(e.target.value);
-  }
-
-  _onSearch = (e) => {
-    this._vm.onSearch();
-  }
 }
 
 const SS = StyleSheet.create({
@@ -87,11 +87,12 @@ const SS = StyleSheet.create({
   searchContentContainer: {
     maxWidth: 600,
     margin: '0 auto',
+    padding: '0 10px',
   },
   searchBlock: {
     display: 'flex',
     flexDirection: 'row',
-    justifyContent: 'center'
+    justifyContent: 'center',
   },
   searchTitle: {
     color: '#FFF',
@@ -101,19 +102,19 @@ const SS = StyleSheet.create({
   },
   button: {
     marginLeft: 20,
-    fontSize: 15
+    fontSize: 15,
   },
   loaderContainer: {
     display: 'flex',
     height: 500,
     flexDirection: 'column',
     justifyContent: 'center',
-    alignItems: 'center'
+    alignItems: 'center',
   },
   resultContainer: {
     padding: 20,
     maxWidth: 900,
     margin: '0 auto',
     boxShadow: '0px 0px 69px -27px rgba(0,0,0,1)',
-  }
+  },
 });

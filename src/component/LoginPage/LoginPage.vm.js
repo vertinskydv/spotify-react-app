@@ -5,9 +5,13 @@ class LoginPage {
     this._authService = authService;
   }
 
+  initialize() {
+    this._authService.logOut();
+  }
+
   onLogin = () => {
     this._authService.logIn();
   }
 }
 
-export const LoginPageVM = new LoginPage();
+export const loginPageVM = new LoginPage();

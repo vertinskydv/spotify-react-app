@@ -1,6 +1,7 @@
 import { observable, action, reaction } from 'mobx';
-import { debounce } from 'underscore'
+import { debounce } from 'underscore';
 
+import { appStateStore } from '../../store/AppState.store';
 import { authService } from '../../service/AuthService';
 import { searchService } from '../../service/SearchService';
 
@@ -11,21 +12,24 @@ class SearchPage {
   @observable searchText = '';
   @observable albums;
   @observable isBusy = false;
+  _history = null;
 
-  constructor () {
+  constructor() {
     this._authService = authService;
     this._searchService = searchService;
+    this._appStateStore = appStateStore;
 
     // call onSearch after 2sec delay after input change
-    reaction(() => this.inputText,
+    reaction(
+      () => this.inputText,
       (inputText) => {
         if (inputText) {
           this._lazySearch();
         } else {
           this._lazySearch.cancel();
         }
-      }
-    )
+      },
+    );
   }
 
   _lazySearch = debounce(this.onSearch, AUTO_SEARCH_TIME);
@@ -33,9 +37,13 @@ class SearchPage {
   @action
   initialize(props) {
     this._history = props.history;
-    const success = this._authService.storeToken();
-    if (!success) {
-      props.history.push('/login');
+    if (!this._appStateStore.accessToken) {
+      const setTokenSuccess = this._authService.storeToken();
+      if (!setTokenSuccess) {
+        props.history.push('/login');
+      } else {
+        props.history.replace('/search');
+      }
     }
   }
 
@@ -57,10 +65,10 @@ class SearchPage {
   @action
   async onSearch() {
     this._lazySearch.cancel();
-    if (!this.inputText) {return};
+    if (!this.inputText) { return; }
     this.isBusy = true;
     const response = await this._searchService.getAlbumsByText(this.inputText);
-    if(response.error && response.error.status === 401) {
+    if (response.error && response.error.status === 401) {
       this._history.push('/login');
       return;
     }
@@ -70,7 +78,6 @@ class SearchPage {
     this.setAlbums(albums);
     this.isBusy = false;
   }
-
 }
 
 export const SearchPageVM = new SearchPage();

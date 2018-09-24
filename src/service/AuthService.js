@@ -2,15 +2,16 @@ import { CLIENT_ID } from '../const/spotify';
 
 import { appStateStore } from '../store/AppState.store';
 import { storageService } from './StorageService';
+import { urlService } from './UrlService';
 
 const AUTH_URL = 'https://accounts.spotify.com/authorize';
 const REDIRECT_URI = encodeURIComponent(`${window.location.origin}/search`);
-const TOKEN_URL_KEY = 'access_token=';
 
 class Auth {
   constructor() {
     this._appStateStore = appStateStore;
     this._storageService = storageService;
+    this._urlService = urlService;
   }
 
   logIn() {
@@ -18,18 +19,16 @@ class Auth {
   }
 
   storeToken() {
-    const token = this._getTokenFromUrl();
+    const token = this._urlService.getTokenFromUrl();
     if (!token) { return false; }
     this._appStateStore.setAccessToken(token);
     this._storageService.setToken(token);
     return true;
   }
 
-  _getTokenFromUrl() {
-    const { href } = window.location;
-    if (href.indexOf(TOKEN_URL_KEY) === -1) { return false; }
-    const token = href.split(TOKEN_URL_KEY).pop().split('&').shift();
-    return token;
+  logOut() {
+    this._appStateStore.setAccessToken('');
+    this._storageService.cleanToken();
   }
 }
 
