@@ -57,6 +57,7 @@ class SearchPage {
   @action
   async onSearch() {
     this._lazySearch.cancel();
+    if (!this.inputText) {return};
     this.isBusy = true;
     const response = await this._searchService.getAlbumsByText(this.inputText);
     if(response.error && response.error.status === 401) {
